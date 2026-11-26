@@ -1,0 +1,9 @@
+﻿target,feature_mode,model,n_features_raw,n_pca,r2_mean,r2_median,rmse_mean
+co,window,hgb,385,40,0.7415,0.8958,8.336
+co,current,hgb,55,40,0.5844,0.61,11.51
+co,window,ridge,385,40,0.3445,0.7108,12.52
+co,current,ridge,55,40,-0.1216,0.465,16.457
+co2,window,hgb,385,40,0.4422,0.6045,3.698
+co2,current,hgb,55,40,0.2594,0.3867,4.471
+co2,window,ridge,385,40,-0.192,0.4561,4.891
+co2,current,ridge,55,40,-4.4204,0.1851,8.133
