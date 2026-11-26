@@ -145,3 +145,50 @@ See the first card; this is the most directly aligned deep sequence-model study 
 ## Reference URLs
 
 The DOI and publisher URLs are recorded in each entry in [papers.json](papers.json). Use the DOI link as the stable citation target.
+
+
+---
+
+# Verified free full-text additions (checked 2026-11-26)
+
+The detailed reading notes and free links are in [open-access-reading-list.md](open-access-reading-list.md). Four additional papers have been added to the structured bibliography; the existing 2019 IPSO-RELM entry was upgraded after its publisher-hosted PDF was inspected.
+
+## An et al. (2026) — physics-aware cumulative decarburization
+
+- **Title:** A Physics-Aware and Interpretable Framework for Predicting Cumulative Decarburization in Basic Oxygen Furnace (BOF) Steelmaking
+- **Venue / DOI:** *Applied Sciences*, 16(6), 3059; [10.3390/app16063059](https://doi.org/10.3390/app16063059)
+- **Free full text:** [MDPI HTML](https://www.mdpi.com/2076-3417/16/6/3059) · [PDF](https://www.mdpi.com/2076-3417/16/6/3059/pdf)
+- **Method:** Full-spectrum averaged cross-correlation for off-gas delay; NIST-informed characteristic spectral lines for nine elements; element-wise PCA; Stacking with RF, ExtraTrees, XGBoost and CatBoost plus ElasticNet meta-learner.
+- **Key detail:** 0.5 s synchronized sampling; 2048 spectral channels; one complete heat held out per converter. Example heat A1 lag approximately 24 s.
+- **Relevance:** Highest topical relevance to spectrum/off-gas synchronization and heat-wise validation. However, target is cumulative decarburization, not separate CO/CO2 trajectories, and the article assumes relatively stable delay within each converter.
+
+## Liu et al. (2025) — feature selection with SVR and DNN
+
+- **Title:** Evaluation of Feature Selection Methods for Oxygen Supply Prediction in BOF Steelmaking
+- **Venue / DOI:** *ISIJ International*, 65(10), 1454–1462; [10.2355/isijinternational.ISIJINT-2025-165](https://doi.org/10.2355/isijinternational.ISIJINT-2025-165)
+- **Free full text:** [J-STAGE HTML](https://www.jstage.jst.go.jp/article/isijinternational/65/10/65_ISIJINT-2025-165/_html/-char/en) · [PDF](https://www.jstage.jst.go.jp/article/isijinternational/65/10/65_ISIJINT-2025-165/_pdf)
+- **Method:** PCC, SCC, MI and MIC feature ranking; top-eight subsets; Elastic Net, SVR, XGBoost, DNN and KNN; GWO tuning; PI-SHAP.
+- **Reported results:** MIC average RMSE 197.4 m³, R² 0.649; PI-SHAP reduced DNN RMSE from 198.5 to 194.6 m³.
+- **Relevance:** Useful for comparing feature-selection methods and SVR/DNN on process variables. It predicts total oxygen supply from tabular data, not gas flow from spectra.
+
+## Khaksar Ghalati et al. (2025) — TTB-BOFNet
+
+- **Title:** Deep Transformers for Analyzing BOF Steelmaking Data
+- **Venue / DOI:** *Metallurgical and Materials Transactions B*, 56, 4201–4217; [10.1007/s11663-025-03615-7](https://doi.org/10.1007/s11663-025-03615-7)
+- **Free full text:** [Springer HTML](https://link.springer.com/article/10.1007/s11663-025-03615-7) · [PDF](https://link.springer.com/content/pdf/10.1007/s11663-025-03615-7.pdf)
+- **Method:** EDA-informed binning of sparse numeric features, column embeddings, Transformer blocks, concatenation with remaining numeric features and MLP regression head.
+- **Reported results:** 10,168 operations; test R² 0.8435, compared with 0.8287 for TabTransformer and 0.8060 for MLP.
+- **Relevance:** Useful for tabular feature interaction and sparse process variables, not temporal spectral prediction.
+
+## Yang et al. (2026) — dynamic flame-image Transformer
+
+- **Title:** Transformer-Based Dynamic Flame Image Analysis for Real-Time Carbon Content Prediction in BOF Steelmaking
+- **Venue / DOI:** *Metals*, 16(2), 185; [10.3390/met16020185](https://doi.org/10.3390/met16020185)
+- **Free full text:** [MDPI HTML](https://www.mdpi.com/2075-4701/16/2/185) · [PDF](https://www.mdpi.com/2075-4701/16/2/185/pdf)
+- **Method:** RGB plus optical-flow channel; cubic-spline labels from sparse expert points; 36 carbon categories; six-layer Transformer encoder-decoder.
+- **Reported results:** 90.31% validation top-1 accuracy and 96.82% within ±0.02; one complete batch held out for independent testing.
+- **Relevance:** Useful for temporal attention and dynamic flame representations, but image input and carbon-classification output differ from Problem B's spectral gas regression.
+
+## Existing record upgraded: Zhang et al. (2019) — IPSO-RELM
+
+The publisher-hosted PDF is freely accessible and was inspected. It contains the ELM and RELM equations, PSO update equations, the paper's nonlinear inertia-weight and mutation modifications, and comparisons with BP, ELM and RELM. Reported IPSO-RELM: 94% hit rate within ±0.025%, MSE 2.18×10⁻⁸, R² 0.72. The target is endpoint manganese, not continuous gas flow. The publisher-hosted copy is free to read; no explicit open license was verified.
