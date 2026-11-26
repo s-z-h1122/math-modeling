@@ -1,0 +1,5 @@
+﻿Tag,K_Unwhite_GD,K_White_GD_Raw,K_Selected,BadCols,Blackout_Frames,Flash_Frames,NarrowSat_Pts,Spikes_Pts,Overall_Pass,C1_Phys_Pass,C2_AnomalyClean_Pass,C3_PeakFidelity_Pass,C4_NoiseFloor_Pass,Min_Intensity,Hot383_Dev_Sigma,Remaining_Blackouts,Na589_Err%,K766_Err%,K770_Err%,Max_PeakShift_nm,NaK_SpikeFlag_Rate%,RMSE_Dark,Sigma_Dark_Ref,Dark_Ratio,RMSE_Bright,Sigma_Bright_Ref,Bright_Ratio
+Att02_6B03206,93,15,15,0,155,5,0,104,True,True,True,True,True,278.51,0.64,0,0.285,0.03,0.262,0.0,0.139,30.79,30.0,1.026,124.37,111.0,1.12
+Att06_6C02058,62,14,14,11,475,159,0,39,True,True,True,True,True,185.74,1.733,0,1.108,0.864,0.231,0.329,0.063,33.9,33.13,1.023,124.34,112.29,1.107
+Att05_6C02057,25,14,14,9,146,20,0,73,False,True,False,True,True,10.0,0.045,2,0.178,0.142,0.152,0.0,0.1712,33.34,32.91,1.013,164.47,161.59,1.018
+Att09_6C02107,70,15,15,9,249,20,0,130,True,True,True,True,True,10.0,0.413,0,0.599,0.19,0.021,0.351,0.1877,33.67,32.95,1.022,155.04,150.77,1.028
