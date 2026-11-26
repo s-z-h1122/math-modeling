@@ -4,9 +4,10 @@ This folder collects research relevant to **2026 APMCM Problem B: Dual-modal Tem
 
 ## Files
 
-- [papers.json](papers.json) — machine-readable index of 14 verified bibliographic records, model summaries, evidence levels and source links.
+- [papers.json](papers.json) — machine-readable index of 18 verified bibliographic records, model summaries, evidence levels and source links.
 - [papers.md](papers.md) — human-readable paper cards and comparison table.
 - [synthesis.md](synthesis.md) — problem-specific synthesis, candidate experiments and validation cautions.
+- [open-access-reading-list.md](open-access-reading-list.md) — verified free full-text papers and detailed reading notes.
 
 ## Scope
 
@@ -54,4 +55,4 @@ Cite the original publisher/DOI page in any report. Do not copy long passages fr
 - **Research synthesis:** conclusions drawn by comparing multiple papers.
 - **Proposed experiments:** ideas to test on the competition data, not established results.
 
-Last bibliographic verification: **2026-11-26**.
+Last bibliographic verification: **2026-11-26**. Four additional free full-text papers were added; the 2019 IPSO-RELM record was upgraded from abstract-only to full-text after inspecting the publisher PDF.
