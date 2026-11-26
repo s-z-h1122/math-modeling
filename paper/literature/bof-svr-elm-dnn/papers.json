@@ -1,0 +1,677 @@
+{
+  "schema_version": "1.0.0",
+  "knowledge_base_title": "BOF Steelmaking Literature: SVR, ELM and Deep Neural Networks",
+  "generated_on": "2026-11-26",
+  "language": "en",
+  "companion_markdown": "papers.md",
+  "problem_context": {
+    "competition": "2026 Asia and Pacific Mathematical Contest in Modeling",
+    "problem": "Problem B — Dual-modal Temporal Information Fusion Modeling for Converter Steelmaking Process",
+    "source_file": "2026 APMCM Problem B.pdf",
+    "source_pages": "1-4",
+    "source_derived_facts": [
+      "Ten converter heats are supplied.",
+      "For each heat, flame spectra contain about 1400 time rows and 2047 wavelength channels; sampling interval is 0.5 seconds.",
+      "The stated wavelength range is 340.535 nm to 1027.678 nm.",
+      "Flue-gas data contain CO2 and CO time series sampled every 0.5 seconds.",
+      "The problem text states that the table values for CO2 and CO are instantaneous volume flow rates in m3/s, although the table headings use concentration wording.",
+      "Cumulative oxygen consumption is also provided; oxygen-lance flow rate is part of the requested analysis.",
+      "Question 1 requests outlier handling and continuous reconstruction for spectra and time series, including 3D spectral plots for all ten heats.",
+      "Question 2 requests analysis of cumulative oxygen, CO2/CO signals and total emissions, including time delays under different oxygen-lance flow rates.",
+      "Question 3 requests real-time gas-information prediction from converter-mouth flame spectra and validation on all ten heats; models trained on different attachments are to be combined globally or by groups for generalization."
+    ]
+  },
+  "evidence_policy": {
+    "full_text": "The publisher page or open full text was accessible and inspected for methods/results.",
+    "abstract_only": "Publisher abstract/preview and bibliographic metadata were accessible, but the full article was not inspected.",
+    "metadata_only": "Bibliographic metadata and at most a short abstract fragment were accessible; method/results must not be inferred.",
+    "note": "Reported metrics are transcribed from accessible sources and belong to each paper's own data and target definitions. They are not directly comparable across papers."
+  },
+  "papers": [
+    {
+      "id": "bof-fluegas-ae-gwo-bilstm-2026",
+      "title": "An improved flue gas analysis model based on the correction of the converter mouth flame spectrum",
+      "authors": [
+        "Xuezhi Wu",
+        "Huimin Zhao",
+        "Yao Xiao",
+        "Jiahao Zhang",
+        "Kenan Wang",
+        "Yang Han",
+        "Aimin Yang"
+      ],
+      "publication_year": 2026,
+      "venue": "Ironmaking & Steelmaking: Processes, Products and Applications (OnlineFirst)",
+      "doi": "10.1177/03019233251382772",
+      "doi_url": "https://doi.org/10.1177/03019233251382772",
+      "publisher_url": "https://journals.sagepub.com/doi/10.1177/03019233251382772",
+      "model_family": [
+        "Autoencoder",
+        "BiLSTM",
+        "metaheuristic optimization"
+      ],
+      "task": "Converter steelmaking multi-stage endpoint prediction and CO/CO2 emission prediction.",
+      "input_data": "2048-dimensional converter-mouth flame spectral data; the process is divided into three stages using dynamic cumulative quantities fitted from CO and CO2 emission volumes.",
+      "output_target": "CO and CO2 emission-related outputs and endpoint carbon prediction context; the abstract reports gas-specific prediction errors.",
+      "preprocessing": "Dynamic cumulative-quantity fitting for three-stage process segmentation; autoencoder dimensionality reduction with Optuna optimization.",
+      "architecture_or_algorithm": "Autoencoder + Optuna for spectral dimensionality reduction; BiLSTM for stage-wise temporal prediction.",
+      "optimization": "Grey Wolf Optimization (GWO) tunes BiLSTM parameters; Optuna is used in the autoencoder dimensionality-reduction stage.",
+      "evaluation": "Compared with BP, LSTM, BiLSTM and Transformer baselines; reports MAE, MAPE and RMSE.",
+      "reported_results": [
+        "CO MAE 18.0017 and CO2 MAE 1.7307 (units not specified in the accessible abstract).",
+        "CO RMSE 20.2151 and CO2 RMSE 2.1321 (units not specified in the accessible abstract).",
+        "The abstract reports lower errors across all three stages than the compared models, with a notable reduction in stage three."
+      ],
+      "limitations_or_caveats": "Publisher page exposes the abstract but marks the article as restricted access. The exact dataset size, split strategy and detailed model configuration were not verified from full text. This paper predicts gas-emission-related outputs in BOF, but its target definition should be checked against the competition's instantaneous gas-flow columns before direct reuse.",
+      "relevance_to_apmcm_b": "Very high topical relevance: BOF flame spectrum, 2048-dimensional spectral input, CO/CO2 outputs, stage segmentation and BiLSTM. It is the closest paper in this list to the spectral-to-gas prediction part of Problem B.",
+      "reusable_ideas": [
+        "Compare spectral dimensionality reduction before temporal modeling.",
+        "Test stage-aware models instead of assuming one global mapping over the whole heat.",
+        "Use a controlled baseline comparison and feature-importance analysis such as SHAP.",
+        "Treat GWO as a candidate optimizer, not as a guaranteed improvement."
+      ],
+      "evidence_level": "abstract_only",
+      "evidence_scope": "Publisher abstract, author list, DOI and online publication date verified; full text not accessed.",
+      "sources": [
+        "https://journals.sagepub.com/doi/10.1177/03019233251382772",
+        "https://doi.org/10.1177/03019233251382772"
+      ],
+      "verification_date": "2026-11-26"
+    },
+    {
+      "id": "bof-flame-svc-svr-2014",
+      "title": "BOF endpoint prediction based on the flame radiation by hybrid SVC and SVR modeling",
+      "authors": [
+        "Y. Shao",
+        "M. Zhou",
+        "Y. Chen",
+        "Q. Zhao",
+        "S. Zhao"
+      ],
+      "publication_year": 2014,
+      "venue": "Optik, 125(11), 2491-2496",
+      "doi": "10.1016/j.ijleo.2013.10.094",
+      "doi_url": "https://doi.org/10.1016/j.ijleo.2013.10.094",
+      "publisher_url": "https://www.sciencedirect.com/science/article/abs/pii/S0030402613014666",
+      "model_family": [
+        "Support Vector Classification",
+        "epsilon-SVR"
+      ],
+      "task": "BOF endpoint carbon-content prediction using converter-mouth flame radiation.",
+      "input_data": "Flame spectral distribution at the BOF vessel mouth.",
+      "output_target": "Molten-steel state / endpoint carbon content; SVC classifies blowing phases and epsilon-SVR performs regression.",
+      "preprocessing": "Blowing phases are separated using mechanism-based phase classification; useful spectral variables are extracted for modeling.",
+      "architecture_or_algorithm": "Hybrid two-stage SVM framework: SVC phase classification followed by phase-aware epsilon-SVR regression.",
+      "optimization": "No specific metaheuristic parameter optimizer is identified in the accessible abstract.",
+      "evaluation": "Simulation on industrial datasets; the accessible abstract reports comparative effectiveness but no numeric metrics.",
+      "reported_results": [
+        "The authors report improved endpoint prediction performance relative to existing methods; no numeric metric is given in the accessible abstract."
+      ],
+      "limitations_or_caveats": "Accessible ScienceDirect content is an abstract/preview. The task is endpoint carbon prediction, not continuous CO/CO2 prediction. Exact feature definitions, sample counts and validation splits require full-text review.",
+      "relevance_to_apmcm_b": "High for spectral-to-regression methodology. The phase classifier plus regressor is a useful candidate when the spectral-to-target relationship changes across process stages.",
+      "reusable_ideas": [
+        "Compare one global SVR against a phase-classifier-plus-SVR architecture.",
+        "Use RBF-SVR as a classical nonlinear regression baseline.",
+        "Check whether process stage is a confounder before fitting a single mapping."
+      ],
+      "evidence_level": "abstract_only",
+      "evidence_scope": "Publisher abstract and bibliographic metadata verified; full text not accessed.",
+      "sources": [
+        "https://www.sciencedirect.com/science/article/abs/pii/S0030402613014666",
+        "https://doi.org/10.1016/j.ijleo.2013.10.094"
+      ],
+      "verification_date": "2026-11-26"
+    },
+    {
+      "id": "bof-wtwtsvr-static-control-2019",
+      "title": "End-Point Static Control of Basic Oxygen Furnace (BOF) Steelmaking Based on Wavelet Transform Weighted Twin Support Vector Regression",
+      "authors": [
+        "Chuang Gao",
+        "Minggang Shen",
+        "Xiaoping Liu",
+        "Lidong Wang",
+        "Maoxiang Chu"
+      ],
+      "publication_year": 2019,
+      "venue": "Complexity, 2019, Article 7408725",
+      "doi": "10.1155/2019/7408725",
+      "doi_url": "https://doi.org/10.1155/2019/7408725",
+      "publisher_url": "https://onlinelibrary.wiley.com/doi/10.1155/2019/7408725",
+      "model_family": [
+        "Twin Support Vector Regression",
+        "Wavelet transform",
+        "weighted regression"
+      ],
+      "task": "BOF static control built around endpoint carbon-content and temperature prediction.",
+      "input_data": "Real-plant BOF samples; the article describes 220 samples and a static-control context involving hot-metal initial conditions, oxygen volume and auxiliary materials.",
+      "output_target": "Endpoint carbon content and temperature; the overall static-control system also calculates oxygen-blowing volume and auxiliary-material weight.",
+      "preprocessing": "Wavelet transform is used to denoise output samples; data are normalized. The paper describes 170 samples used for training in its prediction-model procedure.",
+      "architecture_or_algorithm": "Wavelet Transform Weighted Twin Support Vector Regression (WTWTSVR); wavelet-derived weighted matrix and coefficient vector are added to the twin-SVR objective functions; RBF kernel is used.",
+      "optimization": "Regulating parameters including penalty and epsilon-related parameters are tuned; the paper solves two quadratic programming problems for the twin regressors.",
+      "evaluation": "Prediction hit rates are evaluated for carbon content and temperature; static-control hit rates are also reported.",
+      "reported_results": [
+        "With carbon error bound 0.005%, carbon hit rate is 92%; with temperature error bound 10 C, temperature hit rate is 96%.",
+        "The reported double hit rate is 90%.",
+        "For the static-control outputs, reported hit rates are 90% for oxygen volume (800 Nm3 error bound) and 88% for auxiliary-material weight (5.5 ton error bound)."
+      ],
+      "limitations_or_caveats": "This is a static endpoint-control study, not a flame-spectrum-to-gas time-series model. Its 220-sample plant dataset and endpoint targets differ substantially from the competition's ten heats of high-dimensional spectral time series.",
+      "relevance_to_apmcm_b": "Useful SVR variant and optimization reference, but its input/target setup is not directly interchangeable with Problem B. Treat it as a model-method reference rather than a ready-made solution.",
+      "reusable_ideas": [
+        "Benchmark twin-SVR variants against ordinary RBF-SVR.",
+        "Study wavelet denoising and weighting for noisy temporal observations.",
+        "Keep prediction metrics separate from downstream control metrics."
+      ],
+      "evidence_level": "full_text",
+      "evidence_scope": "Publisher open-access page exposes abstract, method descriptions, equations and conclusion; full-text page content was inspected.",
+      "sources": [
+        "https://onlinelibrary.wiley.com/doi/10.1155/2019/7408725",
+        "https://doi.org/10.1155/2019/7408725"
+      ],
+      "verification_date": "2026-11-26"
+    },
+    {
+      "id": "bof-wnpsvr-woa-2021",
+      "title": "End-point prediction of 260 tons basic oxygen furnace (BOF) steelmaking based on WNPSVR and WOA",
+      "authors": [
+        "Liming Liu",
+        "Ping Li",
+        "Maoxiang Chu",
+        "Chuang Gao"
+      ],
+      "publication_year": 2021,
+      "venue": "Journal of Intelligent & Fuzzy Systems, 41(2), 2923-2937",
+      "doi": "10.3233/JIFS-210007",
+      "doi_url": "https://doi.org/10.3233/JIFS-210007",
+      "publisher_url": "https://journals.sagepub.com/doi/10.3233/JIFS-210007",
+      "model_family": [
+        "Nonparallel Support Vector Regression",
+        "Whale Optimization Algorithm"
+      ],
+      "task": "BOF endpoint prediction for a 260-ton converter.",
+      "input_data": "BOF production/process data; exact predictor list is not stated in the accessible abstract.",
+      "output_target": "Endpoint carbon content and molten-steel temperature.",
+      "preprocessing": "K-nearest-neighbor algorithm is used to extract sample weight information.",
+      "architecture_or_algorithm": "Weighted Nonparallel Support Vector Regression (WNPSVR).",
+      "optimization": "Whale Optimization Algorithm (WOA) optimizes parameters in the WNPSVR objective function.",
+      "evaluation": "Hit rates are reported under fixed carbon-content and temperature error bounds.",
+      "reported_results": [
+        "Carbon hit rate 89% within 0.005 wt.% error.",
+        "Temperature hit rate 95% within 10 C error.",
+        "Combined/double hit rate 85%."
+      ],
+      "limitations_or_caveats": "Publisher abstract only. The input variables, sample count, split protocol and detailed WOA search settings were not verified. Endpoint targets differ from continuous CO/CO2 flow targets.",
+      "relevance_to_apmcm_b": "Useful for comparing SVR-family optimizers and weighted samples. It is not evidence that WOA will improve this competition dataset without validation.",
+      "reusable_ideas": [
+        "Compare WOA-tuned SVR against default SVR under identical grouped validation.",
+        "Investigate local sample weighting when heats differ in operating conditions.",
+        "Report per-heat metrics rather than only pooled hit rates."
+      ],
+      "evidence_level": "abstract_only",
+      "evidence_scope": "Publisher abstract, bibliographic metadata and reported hit rates verified; full text not accessed.",
+      "sources": [
+        "https://journals.sagepub.com/doi/10.3233/JIFS-210007",
+        "https://doi.org/10.3233/JIFS-210007"
+      ],
+      "verification_date": "2026-11-26"
+    },
+    {
+      "id": "bof-ema-elm-2014",
+      "title": "Endpoint prediction model for basic oxygen furnace steel-making based on membrane algorithm evolving extreme learning machine",
+      "authors": [
+        "Min Han",
+        "Chuang Liu"
+      ],
+      "publication_year": 2014,
+      "venue": "Applied Soft Computing, 19, 430-437",
+      "doi": "10.1016/j.asoc.2013.09.012",
+      "doi_url": "https://doi.org/10.1016/j.asoc.2013.09.012",
+      "publisher_url": "https://www.sciencedirect.com/science/article/abs/pii/S1568494613003062",
+      "model_family": [
+        "Extreme Learning Machine",
+        "Evolutionary Membrane Algorithm"
+      ],
+      "task": "BOF endpoint carbon-content and temperature prediction.",
+      "input_data": "Noisy sinc benchmark data and actual BOF production data; exact process-variable list is not stated in the accessible abstract.",
+      "output_target": "Endpoint carbon content and molten-steel temperature.",
+      "preprocessing": "The paper evaluates the approach on noisy data; detailed production-data preprocessing is not fully available in the abstract.",
+      "architecture_or_algorithm": "Single-hidden-layer feedforward ELM; the evolutionary membrane algorithm adaptively adjusts ELM parameters.",
+      "optimization": "Evolutionary Membrane Algorithm (EMA) optimizes ELM input weights and hidden-layer thresholds/parameters that would otherwise be randomly generated.",
+      "evaluation": "Noisy sinc regression experiment and actual BOF production-data experiment; accuracy and robustness are discussed without numeric values in the accessible abstract.",
+      "reported_results": [
+        "The authors report competitive prediction accuracy and robustness to noise; no numeric result is included in the accessible abstract."
+      ],
+      "limitations_or_caveats": "Publisher abstract and university research-profile summary were inspected, but full publisher text was not accessed. This is endpoint prediction, not spectral-to-gas forecasting.",
+      "relevance_to_apmcm_b": "Directly relevant to the ELM family in BOF. It motivates comparing standard ELM with an optimizer-controlled ELM, but the exact input variables and validation design must be checked before reuse.",
+      "reusable_ideas": [
+        "Use standard ELM as a fast baseline and repeat runs across fixed random seeds.",
+        "Compare EMA-ELM with unoptimized ELM to isolate the optimizer's contribution.",
+        "Track variance across random initializations, not only the best run."
+      ],
+      "evidence_level": "abstract_only",
+      "evidence_scope": "ScienceDirect abstract and university author-profile summary verified; full text not accessed.",
+      "sources": [
+        "https://www.sciencedirect.com/science/article/abs/pii/S1568494613003062",
+        "https://faculty.dlut.edu.cn/1999011009/en/lwcg/747836/content/45298.htm",
+        "https://doi.org/10.1016/j.asoc.2013.09.012"
+      ],
+      "verification_date": "2026-11-26"
+    },
+    {
+      "id": "bof-ipso-relm-2019",
+      "title": "Improved prediction model for BOF end-point manganese content based on IPSO-RELM method",
+      "authors": [
+        "Zhuang Zhang",
+        "Ling-ling Cao",
+        "Wen-hui Lin",
+        "Jian-kun Sun",
+        "Xiao-ming Feng",
+        "Qing Liu"
+      ],
+      "publication_year": 2019,
+      "venue": "Chinese Journal of Engineering, 41(8), 1052-1060",
+      "doi": "10.13374/j.issn2095-9389.2019.08.011",
+      "doi_url": "https://doi.org/10.13374/j.issn2095-9389.2019.08.011",
+      "publisher_url": "https://cje.ustb.edu.cn/en/article/doi/10.13374/j.issn2095-9389.2019.08.011",
+      "model_family": [
+        "Regularized Extreme Learning Machine",
+        "Improved Particle Swarm Optimization"
+      ],
+      "task": "Prediction of BOF endpoint manganese content.",
+      "input_data": "Control variables selected from BOF mechanism analysis and actual production data; exact full predictor list is not reproduced in the accessible abstract.",
+      "output_target": "Endpoint manganese content.",
+      "preprocessing": "The paper analyzes process mechanisms and selects control variables; details of preprocessing are not fully stated in the abstract.",
+      "architecture_or_algorithm": "Regularized ELM (RELM) for endpoint manganese regression.",
+      "optimization": "Improved Particle Swarm Optimization (IPSO) optimizes the regularized ELM model.",
+      "evaluation": "Compared with BP neural network, ELM and RELM using hit ratio, mean squared error and fitting degree.",
+      "reported_results": [
+        "94% hit ratio when prediction error is within +/-0.025%.",
+        "Mean squared error 2.18e-8.",
+        "Reported fitting degree R2 = 0.72."
+      ],
+      "limitations_or_caveats": "The accessible journal page provides the abstract and metadata; detailed full-text procedures were not inspected. The target is manganese content, not CO/CO2. Reported values belong to the paper's own dataset and cannot be compared directly with Problem B.",
+      "relevance_to_apmcm_b": "Strong reference for regularization and optimizer-based ELM design. It can inform an IPSO-RELM baseline, but only after adapting the output target and validating across held-out heats.",
+      "reusable_ideas": [
+        "Compare ELM, RELM and IPSO-RELM in a controlled ablation.",
+        "Tune regularization and hidden-layer parameters only within training heats.",
+        "Keep target-specific error bounds separate from generic RMSE."
+      ],
+      "evidence_level": "abstract_only",
+      "evidence_scope": "Official journal abstract, author list and bibliographic metadata verified; full text not inspected.",
+      "sources": [
+        "https://cje.ustb.edu.cn/en/article/doi/10.13374/j.issn2095-9389.2019.08.011",
+        "https://cje.ustb.edu.cn/article/doi/10.13374/j.issn2095-9389.2019.08.011?viewType=HTML",
+        "https://doi.org/10.13374/j.issn2095-9389.2019.08.011"
+      ],
+      "verification_date": "2026-11-26"
+    },
+    {
+      "id": "bof-jitl-vmf-welm-2021",
+      "title": "Just-in-time-learning based prediction model of BOF endpoint carbon content and temperature via vMF mixture model and weighted extreme learning machine",
+      "authors": [
+        "Long Qi",
+        "Hui Liu",
+        "Qian Xiong",
+        "Zongxin Chen"
+      ],
+      "publication_year": 2021,
+      "venue": "Computers & Chemical Engineering, 154, Article 107488",
+      "doi": "10.1016/j.compchemeng.2021.107488",
+      "doi_url": "https://doi.org/10.1016/j.compchemeng.2021.107488",
+      "publisher_url": "https://www.sciencedirect.com/science/article/abs/pii/S0098135421002660",
+      "model_family": [
+        "Just-in-Time Learning",
+        "von Mises-Fisher Mixture Model",
+        "Weighted Extreme Learning Machine"
+      ],
+      "task": "Online/local prediction of BOF endpoint carbon content and temperature under changing raw-material conditions and imbalanced process data.",
+      "input_data": "BOF process data; the abstract emphasizes changing raw-material batches and time-varying process distributions.",
+      "output_target": "Endpoint carbon content and temperature.",
+      "preprocessing": "A vMF mixture-model-based similarity criterion selects relevant historical samples for local modeling.",
+      "architecture_or_algorithm": "JITL local regression with WELM; a V-shaped transfer function is used to define regression sample weights for imbalance handling.",
+      "optimization": "vMF mixture model supports similarity-based sample selection; the paper does not identify a separate metaheuristic optimizer in the abstract.",
+      "evaluation": "Compared with other JITL soft sensors; RMSE and MAE are used. The abstract reports better predictive performance but does not provide numeric values.",
+      "reported_results": [
+        "The proposed JITL-WELM model is reported to outperform compared JITL soft sensors; no numeric metrics are exposed in the accessible abstract."
+      ],
+      "limitations_or_caveats": "Publisher abstract/preview only. The paper's endpoint targets and process-data inputs differ from the competition's spectral-to-gas mapping. The full sample-selection and WELM details need full-text review.",
+      "relevance_to_apmcm_b": "High relevance to cross-heat distribution shift. Its local sample selection concept may help when a global model trained on some heats does not generalize to another heat.",
+      "reusable_ideas": [
+        "Compare global models with local/JITL models using only training-fold historical heats.",
+        "Measure heat-to-heat distribution shift before choosing a local-model strategy.",
+        "Use weighted regression only if target imbalance is demonstrated in the competition data."
+      ],
+      "evidence_level": "abstract_only",
+      "evidence_scope": "Publisher abstract, highlights, author list and DOI verified; full text not accessed.",
+      "sources": [
+        "https://www.sciencedirect.com/science/article/abs/pii/S0098135421002660",
+        "https://doi.org/10.1016/j.compchemeng.2021.107488"
+      ],
+      "verification_date": "2026-11-26"
+    },
+    {
+      "id": "steelmaking-sae-sparse-bayes-2020",
+      "title": "A Stacked Autoencoder With Sparse Bayesian Regression for End-Point Prediction Problems in Steelmaking Process",
+      "authors": [
+        "Chang Liu",
+        "Lixin Tang",
+        "Jiyin Liu"
+      ],
+      "publication_year": 2020,
+      "venue": "IEEE Transactions on Automation Science and Engineering, 17(2), 550-561",
+      "doi": "10.1109/TASE.2019.2935314",
+      "doi_url": "https://doi.org/10.1109/TASE.2019.2935314",
+      "publisher_url": "https://ieeexplore.ieee.org/document/8807316",
+      "model_family": [
+        "Stacked Autoencoder",
+        "Sparse Bayesian Regression"
+      ],
+      "task": "Steelmaking endpoint prediction.",
+      "input_data": "Steelmaking process data; detailed modalities and predictor variables were not verified from the accessible source.",
+      "output_target": "Endpoint quality indices; the accessible abstract fragment identifies temperature and carbon content as key indices.",
+      "preprocessing": "Stacked autoencoder is named in the framework; detailed preprocessing was not verified.",
+      "architecture_or_algorithm": "Stacked autoencoder feature-learning framework combined with sparse Bayesian regression.",
+      "optimization": "Not verified from accessible metadata/abstract fragment.",
+      "evaluation": "Not verified from accessible metadata/abstract fragment.",
+      "reported_results": [
+        "No numeric results are recorded because the accessible source did not expose the full abstract or results."
+      ],
+      "limitations_or_caveats": "The IEEE publisher page was not accessible in this research session. Metadata and a short abstract fragment were corroborated by IEEE staging/search and bibliographic sources. Do not infer architecture details, data modality or performance from the title alone.",
+      "relevance_to_apmcm_b": "Potential reference for unsupervised representation learning followed by a probabilistic regression head, especially for high-dimensional sensor inputs. This entry is lower-confidence until the full paper is obtained.",
+      "reusable_ideas": [
+        "Investigate encoder-based dimensionality reduction followed by a regression model.",
+        "Read the full paper before reusing its architecture or reporting its results."
+      ],
+      "evidence_level": "metadata_only",
+      "evidence_scope": "Title, authors, journal, year, DOI and a short abstract fragment verified; full publisher abstract/full text not accessed.",
+      "sources": [
+        "https://doi.org/10.1109/TASE.2019.2935314",
+        "https://researchr.org/publication/LiuTL20-0",
+        "https://xplorestaging.ieee.org/author/37086201129"
+      ],
+      "verification_date": "2026-11-26"
+    },
+    {
+      "id": "bof-fpn-transformer-asynchronous-2025",
+      "title": "Research on prediction model of converter steelmaking process based on multi-scale feature extraction and self-attention mechanism for multi-source domain asynchronous data",
+      "authors": [
+        "Yan Hu",
+        "Jia Tang",
+        "Baoshan Huang",
+        "Runying Xu"
+      ],
+      "publication_year": 2025,
+      "venue": "Measurement, Article 117060",
+      "doi": "10.1016/j.measurement.2025.117060",
+      "doi_url": "https://doi.org/10.1016/j.measurement.2025.117060",
+      "publisher_url": "https://www.sciencedirect.com/science/article/abs/pii/S0263224125004191",
+      "model_family": [
+        "Feature Pyramid Network",
+        "Transformer",
+        "Self-Attention"
+      ],
+      "task": "Converter operating-condition prediction/classification using multi-source asynchronous industrial data.",
+      "input_data": "Multi-source BOF process data, including smoke concentration and oxygen flow among the variables discussed in the abstract; exact complete feature list not verified.",
+      "output_target": "Operating-condition class/probability, not continuous CO/CO2 regression.",
+      "preprocessing": "A time-offset parameter delta-t is introduced to handle asynchronous multi-source measurements; multiple time windows and sliding parameters are evaluated.",
+      "architecture_or_algorithm": "FPN for bottom-up multi-scale feature extraction and top-down feature fusion, combined with Transformer self-attention to capture long-range dependencies.",
+      "optimization": "The paper evaluates different time-window and sliding parameters; no separate metaheuristic optimizer is stated in the accessible abstract.",
+      "evaluation": "Precision, recall and F1 score for operating-condition classification.",
+      "reported_results": [
+        "At a 15-second time window, precision 90.1%, recall 90.02% and F1 89.7%.",
+        "The abstract reports missing rope-tension data as the largest impact, followed by smoke concentration and oxygen flow rate."
+      ],
+      "limitations_or_caveats": "This is an operating-condition classification paper, not a continuous gas-flow regression paper. The abstract is accessible but full text was not retrieved. Its sensor list and task should not be silently equated with the competition's two modalities.",
+      "relevance_to_apmcm_b": "Very high for the time-alignment and multi-scale fusion concepts in Problem B, but indirect for the requested regression target. The delta-t treatment and temporal windows are worth studying.",
+      "reusable_ideas": [
+        "Define and estimate explicit inter-sensor time offsets before model training.",
+        "Compare simple lag-shift baselines with learned attention-based fusion.",
+        "Use time windows that respect the 0.5-second sampling interval and the physical delay scale."
+      ],
+      "evidence_level": "abstract_only",
+      "evidence_scope": "Publisher abstract, author list, date and DOI verified; full text not accessed.",
+      "sources": [
+        "https://www.sciencedirect.com/science/article/abs/pii/S0263224125004191",
+        "https://doi.org/10.1016/j.measurement.2025.117060"
+      ],
+      "verification_date": "2026-11-26"
+    },
+    {
+      "id": "industrial-spatiotemporal-deep-lstm-2023",
+      "title": "A soft sensor modeling framework embedded with domain knowledge based on spatio-temporal deep LSTM for process industry",
+      "authors": [
+        "Jia-yi Zhou",
+        "Chun-hua Yang",
+        "Xiao-li Wang",
+        "Si-yu Cao"
+      ],
+      "publication_year": 2023,
+      "venue": "Engineering Applications of Artificial Intelligence, Article 106847",
+      "doi": "10.1016/j.engappai.2023.106847",
+      "doi_url": "https://doi.org/10.1016/j.engappai.2023.106847",
+      "publisher_url": "https://www.sciencedirect.com/science/article/abs/pii/S095219762301031X",
+      "model_family": [
+        "Deep LSTM",
+        "Spatio-Temporal Modeling",
+        "Domain Knowledge Embedding"
+      ],
+      "task": "Industrial soft-sensor prediction with time-delayed and coupled process variables.",
+      "input_data": "Process variables from two mineral-processing case studies; not BOF flame spectra.",
+      "output_target": "Key process indices in two mineral-processing processes.",
+      "preprocessing": "Analyzes time delays between key and secondary variables, aligns variables temporally, and selects secondary variables; process sub-processes are decoupled using domain knowledge.",
+      "architecture_or_algorithm": "A spatio-temporal structure model (STSM) is embedded into a deep LSTM network to learn nonlinear dynamic relationships.",
+      "optimization": "No optimizer details are stated in the accessible abstract.",
+      "evaluation": "Effectiveness is demonstrated on two mineral-processing case studies; numeric metrics are not exposed in the accessible abstract.",
+      "reported_results": [
+        "The abstract reports successful validation on two mineral-processing processes but gives no numeric metric."
+      ],
+      "limitations_or_caveats": "Cross-domain reference: the application is mineral processing, not converter steelmaking. It provides a process-modeling framework rather than direct evidence for flame-spectrum prediction.",
+      "relevance_to_apmcm_b": "Useful for modeling time delays and embedding process knowledge into a temporal network. The BOF-specific chemistry and spectral feature extractor would still need to be designed separately.",
+      "reusable_ideas": [
+        "Estimate time delays before constructing the sequence model.",
+        "Represent physically related sub-processes explicitly rather than concatenating all variables blindly.",
+        "Compare a domain-knowledge-aligned LSTM against a plain LSTM baseline."
+      ],
+      "evidence_level": "abstract_only",
+      "evidence_scope": "Publisher abstract, author list, journal and DOI verified; full text not accessed.",
+      "sources": [
+        "https://www.sciencedirect.com/science/article/abs/pii/S095219762301031X",
+        "https://doi.org/10.1016/j.engappai.2023.106847"
+      ],
+      "verification_date": "2026-11-26"
+    },
+    {
+      "id": "bof-spectrum-beads-roughset-bp-2023",
+      "title": "Research on prediction model of converter temperature and carbon content based on spectral feature extraction",
+      "authors": [
+        "Bo Zhao",
+        "Jinxuan Zhao",
+        "Wei Wu",
+        "Fei Zhang",
+        "Tonglu Yao"
+      ],
+      "publication_year": 2023,
+      "venue": "Scientific Reports, 13, Article 14409",
+      "doi": "10.1038/s41598-023-41751-9",
+      "doi_url": "https://doi.org/10.1038/s41598-023-41751-9",
+      "publisher_url": "https://www.nature.com/articles/s41598-023-41751-9",
+      "open_access_url": "https://www.nature.com/articles/s41598-023-41751-9.pdf",
+      "model_family": [
+        "Spectral Feature Selection",
+        "BP Neural Network"
+      ],
+      "task": "Converter endpoint temperature and carbon-content prediction from flame spectra.",
+      "input_data": "2048-dimensional converter-mouth flame spectral data; the paper reports 978 sets of data for the modeling experiment.",
+      "output_target": "Endpoint temperature and carbon content.",
+      "preprocessing": "BEADS baseline correction/noise reduction; genetic-algorithm-optimized rough-set attribute reduction; eight wavelength features selected; 3-sigma outlier removal.",
+      "architecture_or_algorithm": "BP neural network using eight selected spectral indicators; the paper reports a five-hidden-layer-node setting in its final parameter choice.",
+      "optimization": "Grid/enumeration search over learning rate and hidden-layer-node settings; RMSE is used as the selection criterion. The genetic algorithm optimizes rough-set attribute reduction.",
+      "evaluation": "The 978 records are shuffled and split into 600 training and 378 test records; an additional validation subset is described. Temperature and carbon RMSE and tolerance hit rates are reported.",
+      "reported_results": [
+        "Selected wavelength features: f-507, f-520, f-839, f-1073, f-1371, f-1528, f-1727 and f-1826.",
+        "Temperature: reported RMSE 3.85 K; hit rate 88.7% within +/-5 K and 98.4% within +/-10 K.",
+        "Carbon: reported RMSE about 0.021%; hit rate 94.0% within +/-0.05% and 98.3% within +/-0.10%.",
+        "The article reports R2-like prediction-accuracy values around 0.99 for the listed data splits; the paper's own terminology should be checked when quoting."
+      ],
+      "limitations_or_caveats": "Open-access full text was inspected. The random shuffled record split is not equivalent to holding out entire heats; time-adjacent records may be correlated. The targets are endpoint temperature/carbon, not continuous CO/CO2 flow. The paper's 2048 channels differ slightly from the competition's 2047 wavelength points.",
+      "relevance_to_apmcm_b": "Very high for spectral preprocessing and dimensionality reduction. It provides a concrete BOF flame-spectrum workflow, but its validation strategy should not be copied uncritically for ten separate heats.",
+      "reusable_ideas": [
+        "Benchmark BEADS baseline correction and robust outlier handling.",
+        "Compare GA-rough-set feature selection with PCA/PLS and autoencoder embeddings.",
+        "Fit preprocessing and feature selection inside each training fold to avoid leakage.",
+        "Do not use random row-wise splitting as the main generalization test across heats."
+      ],
+      "evidence_level": "full_text",
+      "evidence_scope": "Open-access publisher article and PubMed/PMC metadata were inspected; methods, data split and reported metrics verified.",
+      "sources": [
+        "https://www.nature.com/articles/s41598-023-41751-9",
+        "https://www.nature.com/articles/s41598-023-41751-9.pdf",
+        "https://pubmed.ncbi.nlm.nih.gov/37660162/"
+      ],
+      "verification_date": "2026-11-26"
+    },
+    {
+      "id": "bof-flame-3d-mlcn-2025",
+      "title": "Dynamic flame feature-driven prediction model for basic oxygen furnace steelmaking endpoint carbon content based on three-dimensional multi-layer complex networks",
+      "authors": [
+        "JianXun Liu",
+        "Hui Liu",
+        "FuGang Chen",
+        "YunKe Su",
+        "Heng Li",
+        "XiaoJun Xue"
+      ],
+      "publication_year": 2025,
+      "venue": "Engineering Applications of Artificial Intelligence, 139, Article 109564",
+      "doi": "10.1016/j.engappai.2024.109564",
+      "doi_url": "https://doi.org/10.1016/j.engappai.2024.109564",
+      "publisher_url": "https://www.sciencedirect.com/science/article/abs/pii/S0952197624017226",
+      "model_family": [
+        "Dynamic Flame Feature Extraction",
+        "Three-Dimensional Multi-Layer Complex Network",
+        "Regression"
+      ],
+      "task": "BOF endpoint carbon-content prediction from flame video.",
+      "input_data": "Furnace-mouth flame video; dynamic and static color/texture features are extracted.",
+      "output_target": "Endpoint carbon content.",
+      "preprocessing": "Single-frame flame images are partitioned by color; region centroids and color/spatial information form network features. Multi-frame temporal indices are used to capture changing flame texture.",
+      "architecture_or_algorithm": "3D-MLCN constructs dynamic multi-scale, multi-directional flame-video descriptors and combines them with static color-texture and color features; a regression model predicts endpoint carbon.",
+      "optimization": "No metaheuristic optimizer is stated in the accessible abstract.",
+      "evaluation": "Actual BOF production data; regression performance reported with tolerance hit rate, R2 and RMSE.",
+      "reported_results": [
+        "Carbon prediction accuracy within +/-0.02% error: 87.91%.",
+        "Reported R2 = 0.8547 and RMSE = 2.0959 (the abstract does not state the RMSE unit)."
+      ],
+      "limitations_or_caveats": "This is flame-video/image texture modeling, not 2047-channel spectrometry and not a deep neural network. The article is an abstract/preview in this session; detailed sample count and split protocol were not verified.",
+      "relevance_to_apmcm_b": "Adjacent evidence that dynamic flame behavior contains temporal information relevant to BOF endpoint quality. It may inspire temporal feature engineering, but the competition data are spectral vectors rather than images/video.",
+      "reusable_ideas": [
+        "Compare frame/time-window dynamic features with static spectral features.",
+        "Treat temporal feature extraction as a separate stage from regression.",
+        "Keep image/video methods distinct from spectral-channel methods in the literature review."
+      ],
+      "evidence_level": "abstract_only",
+      "evidence_scope": "Publisher abstract/preview, authors, DOI and reported metrics verified; full text not accessed.",
+      "sources": [
+        "https://www.sciencedirect.com/science/article/abs/pii/S0952197624017226",
+        "https://doi.org/10.1016/j.engappai.2024.109564"
+      ],
+      "verification_date": "2026-11-26"
+    },
+    {
+      "id": "bof-meta-learning-sae-2026",
+      "title": "A Dynamically Adaptive Soft Sensor for End-Point Carbon Content and Temperature Prediction in Multimodal Basic Oxygen Furnace Steelmaking using a Meta-Learning Stacked Autoencoder",
+      "authors": [
+        "Fanyu Zeng",
+        "Hui Liu",
+        "Fugang Chen",
+        "Heng Li",
+        "Xiaojun Xue"
+      ],
+      "publication_year": 2026,
+      "online_first_date": "2025-12-01",
+      "venue": "Steel Research International, 97(5), 2805-2821",
+      "doi": "10.1002/srin.202500757",
+      "doi_url": "https://doi.org/10.1002/srin.202500757",
+      "publisher_url": "https://onlinelibrary.wiley.com/doi/10.1002/srin.202500757",
+      "model_family": [
+        "Stacked Autoencoder",
+        "Meta-Learning",
+        "Multimodal Soft Sensor",
+        "Online Adaptation"
+      ],
+      "task": "Dynamically adaptive BOF endpoint carbon-content and temperature prediction under multimodal operating modes and data drift.",
+      "input_data": "Multimodal historical BOF steelmaking data; exact sensor list is not stated in the accessible abstract.",
+      "output_target": "Endpoint carbon content and temperature.",
+      "preprocessing": "Wasserstein-distance-weighted Dirichlet Process Gaussian Mixture Model clusters historical data into operating modes; posterior mode is inferred for new samples.",
+      "architecture_or_algorithm": "Meta-learned Stacked Autoencoder (SAE) trained across operating modes; a similar historical sample set is selected for local fine-tuning.",
+      "optimization": "Mutual-information-weighted Jensen-Shannon divergence selects similar historical samples; real-time fine-tuning adapts to data drift.",
+      "evaluation": "Experiments on real-world BOF steelmaking data; the abstract reports improved robustness and prediction accuracy but no numeric metric.",
+      "reported_results": [
+        "The abstract reports improved robustness and accuracy under complex multimodal conditions; no numeric values are exposed."
+      ],
+      "limitations_or_caveats": "Publisher abstract and bibliographic page were inspected; full-text link was present but the full text was not retrieved. The data are not shared. Targets are endpoint carbon and temperature, not continuous CO/CO2 flow.",
+      "relevance_to_apmcm_b": "Very high for cross-heat/multimodal generalization ideas. It directly addresses operating modes and adaptation to data drift, both relevant to the ten-heat validation requirement, though its endpoint targets differ.",
+      "reusable_ideas": [
+        "Cluster or characterize heats by operating mode before selecting a global or grouped model.",
+        "Compare a single global encoder with mode-aware/grouped models.",
+        "Use leave-one-heat-out evaluation to test whether adaptation really generalizes to unseen heats.",
+        "Avoid using held-out heat data to select similar training samples or tune the encoder."
+      ],
+      "evidence_level": "abstract_only",
+      "evidence_scope": "Publisher abstract, author list, first-publication date, issue details and DOI verified; full text not retrieved.",
+      "sources": [
+        "https://onlinelibrary.wiley.com/doi/10.1002/srin.202500757",
+        "https://doi.org/10.1002/srin.202500757"
+      ],
+      "verification_date": "2026-11-26"
+    },
+    {
+      "id": "bof-ml-review-2023",
+      "title": "Toward learning steelmaking—A review on machine learning for basic oxygen furnace process",
+      "authors": [
+        "Maryam Khaksar Ghalati",
+        "Jianbo Zhang",
+        "G. M. A. M. El-Fallah",
+        "Bogdan Nenchev",
+        "Hongbiao Dong"
+      ],
+      "publication_year": 2023,
+      "venue": "Materials Genome Engineering Advances, 1(1), e6",
+      "doi": "10.1002/mgea.6",
+      "doi_url": "https://doi.org/10.1002/mgea.6",
+      "publisher_url": "https://onlinelibrary.wiley.com/doi/full/10.1002/mgea.6",
+      "open_access": true,
+      "model_family": [
+        "Review",
+        "SVR",
+        "Artificial Neural Networks",
+        "Hybrid Machine Learning",
+        "Deep Learning"
+      ],
+      "task": "Review of machine-learning applications and workflows for BOF steelmaking.",
+      "input_data": "Review of published BOF studies covering process variables, blowing parameters, additives, time-series and other sensor data.",
+      "output_target": "Review covers endpoint temperature/carbon prediction, anomaly detection and other BOF use cases.",
+      "preprocessing": "Discusses data-driven modeling workflow, data fusion and preparation, and industrial data challenges.",
+      "architecture_or_algorithm": "Surveys SVR (including RBF-kernel use), twin-SVR variants, MLP/ANN, clustering-plus-local-model hybrids and newer deep-learning approaches.",
+      "optimization": "The review discusses model selection, data expansion, transfer learning, multitask learning and graph neural networks as future directions.",
+      "evaluation": "Narrative/systematic comparison of BOF ML use cases and their datasets, tasks and metrics; not a new prediction experiment.",
+      "reported_results": [
+        "The review notes SVR as an established nonlinear BOF regression method and describes RBF kernels as commonly used.",
+        "It identifies limited and diverse industrial data, time-series sensing, transfer learning and multitask learning as important future directions."
+      ],
+      "limitations_or_caveats": "This is a review, not a direct experimental result for the competition's ten heats. Statements in the review summarize heterogeneous studies and should be traced to the cited primary papers before being used as quantitative evidence.",
+      "relevance_to_apmcm_b": "Best entry point for mapping the BOF machine-learning literature and finding primary studies. It helps situate SVR, ANN and newer deep models in the broader steelmaking context.",
+      "reusable_ideas": [
+        "Use the review's cited primary studies to expand the reference list.",
+        "Separate endpoint prediction, anomaly detection and process-state classification tasks.",
+        "Use its industrial data workflow as a checklist, while adapting validation to the competition's ten heats."
+      ],
+      "evidence_level": "full_text",
+      "evidence_scope": "Open-access Wiley review page and sections on BOF workflow, SVR, ANN and future directions inspected.",
+      "sources": [
+        "https://onlinelibrary.wiley.com/doi/full/10.1002/mgea.6",
+        "https://doi.org/10.1002/mgea.6"
+      ],
+      "verification_date": "2026-11-26"
+    }
+  ]
+}
