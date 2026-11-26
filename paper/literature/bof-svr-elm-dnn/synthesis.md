@@ -149,3 +149,40 @@ Start with signal reconstruction and explicit delay analysis. Establish an RBF-S
 - Contest statement: user-provided 2026 APMCM Problem B.pdf.
 - Literature records and publisher/DOI links: see [papers.json](papers.json) and [papers.md](papers.md).
 - Last bibliography verification: 2026-11-26.
+
+
+## G. Findings from verified free full-text papers (2026-11-26)
+
+### Highest-priority reference: An et al. (2026)
+
+This open-access study is unusually close to Problem B's sensor configuration: flame spectra and CO/CO2/O2 off-gas measurements at 0.5-second intervals, with approximately 2048 spectral channels. It estimates transport delay by averaging cross-correlation across all wavelength channels against CO; for one example heat, the reported peak lag is about 24 seconds. It then constructs cumulative decarburization by integrating CO + CO2 with the trapezoidal rule.
+
+The paper's feature strategy is also useful: identify physically meaningful elemental bands (C, Si, Mn, P, Fe, O, Ca, Na, K), screen candidate lines and perform element-wise PCA. Its heat-wise evaluation fits lag compensation and transformations using training heats only.
+
+**Do not copy its constant-lag assumption without modification.** The competition statement indicates the delay varies with oxygen-lance flow. Treat the paper's median training-heat lag as a baseline and compare it against a flow-dependent lag model.
+
+### Feature selection and SVR/DNN: Liu et al. (2025)
+
+The open-access J-STAGE paper compares PCC, SCC, MI and MIC with SVR, DNN and other regressors, and applies GWO and PI-SHAP. It provides a useful ablation template. Its target is total oxygen supply from tabular process data, and its stratified five-fold sample-level validation is not a substitute for holding out complete competition heats.
+
+### Tabular Transformer: Khaksar Ghalati et al. (2025)
+
+TTB-BOFNet uses EDA-informed binning and column embeddings to model interactions among categorical and sparse process variables. This can inform tabular process-variable modeling, but it does not establish that a Transformer is preferable for a 2047-channel time-series input with only ten heats.
+
+### Dynamic flame-image Transformer: Yang et al. (2026)
+
+The open-access image study adds optical flow to RGB flame frames and uses a Transformer encoder-decoder to predict discretized carbon trajectories. It is an adjacent-modality reference only. It is not directly reusable for the competition's spectral matrix unless image/video data are separately available.
+
+### Updated free ELM evidence
+
+The 2019 IPSO-RELM publisher PDF is freely accessible and has now been inspected in full. It includes ELM/RELM formulations and the improved PSO strategy. It predicts endpoint manganese, so it supports the ELM optimization methodology but not continuous gas-flow accuracy.
+
+### Updated reading priorities
+
+1. An et al. (2026): study delay correction, physical spectral features and heat-wise validation.
+2. Zhang et al. (2019): extract IPSO-RELM formulas and optimization steps.
+3. Liu et al. (2025): study feature-selection comparisons for SVR and DNN.
+4. Khaksar Ghalati et al. (2025): study sparse/categorical process features and tabular attention.
+5. Yang et al. (2026): study dynamic flame representation and temporal attention, only as an adjacent image modality.
+
+See [open-access-reading-list.md](open-access-reading-list.md) for free links, detailed methods and limitations.
