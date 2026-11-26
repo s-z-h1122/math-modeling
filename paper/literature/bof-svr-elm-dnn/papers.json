@@ -25,7 +25,7 @@
     "full_text": "The publisher page or open full text was accessible and inspected for methods/results.",
     "abstract_only": "Publisher abstract/preview and bibliographic metadata were accessible, but the full article was not inspected.",
     "metadata_only": "Bibliographic metadata and at most a short abstract fragment were accessible; method/results must not be inferred.",
-    "note": "Reported metrics are transcribed from accessible sources and belong to each paper's own data and target definitions. They are not directly comparable across papers."
+    "note": "Reported metrics are transcribed from accessible sources and belong to each paper's own data and target definitions. They are not directly comparable across papers. Free-full-text status is recorded separately using access_type, full_text_url, license and full_text_read_scope; a free abstract is not counted as full text."
   },
   "papers": [
     {
@@ -288,21 +288,26 @@
         "Mean squared error 2.18e-8.",
         "Reported fitting degree R2 = 0.72."
       ],
-      "limitations_or_caveats": "The accessible journal page provides the abstract and metadata; detailed full-text procedures were not inspected. The target is manganese content, not CO/CO2. Reported values belong to the paper's own dataset and cannot be compared directly with Problem B.",
+      "limitations_or_caveats": "This is endpoint manganese prediction, not continuous CO/CO2 time-series prediction. The freely accessible publisher PDF was inspected, but a specific open-license statement was not verified; link to the publisher copy rather than redistributing the PDF.",
       "relevance_to_apmcm_b": "Strong reference for regularization and optimizer-based ELM design. It can inform an IPSO-RELM baseline, but only after adapting the output target and validating across held-out heats.",
       "reusable_ideas": [
         "Compare ELM, RELM and IPSO-RELM in a controlled ablation.",
         "Tune regularization and hidden-layer parameters only within training heats.",
         "Keep target-specific error bounds separate from generic RMSE."
       ],
-      "evidence_level": "abstract_only",
-      "evidence_scope": "Official journal abstract, author list and bibliographic metadata verified; full text not inspected.",
+      "evidence_level": "full_text",
+      "evidence_scope": "Free publisher-hosted PDF and publisher full-text HTML inspected, including the ELM/RELM equations, IPSO modification, model comparison and reported endpoint-manganese metrics.",
       "sources": [
         "https://cje.ustb.edu.cn/en/article/doi/10.13374/j.issn2095-9389.2019.08.011",
         "https://cje.ustb.edu.cn/article/doi/10.13374/j.issn2095-9389.2019.08.011?viewType=HTML",
-        "https://doi.org/10.13374/j.issn2095-9389.2019.08.011"
+        "https://doi.org/10.13374/j.issn2095-9389.2019.08.011",
+        "https://cje.ustb.edu.cn/cn/article/pdf/preview/10.13374/j.issn2095-9389.2019.08.011.pdf"
       ],
-      "verification_date": "2026-11-26"
+      "verification_date": "2026-11-26",
+      "access_type": "publisher_free_full_text",
+      "full_text_url": "https://cje.ustb.edu.cn/cn/article/pdf/preview/10.13374/j.issn2095-9389.2019.08.011.pdf",
+      "license": "No explicit open license verified; free publisher-hosted reading copy",
+      "full_text_read_scope": "PDF inspected: PSO/IPSO formulation, ELM and RELM equations, IPSO-RELM model design and comparison results."
     },
     {
       "id": "bof-jitl-vmf-welm-2021",
@@ -672,6 +677,246 @@
         "https://doi.org/10.1002/mgea.6"
       ],
       "verification_date": "2026-11-26"
+    },
+    {
+      "id": "bof-oxygen-feature-selection-svr-dnn-2025",
+      "title": "Evaluation of Feature Selection Methods for Oxygen Supply Prediction in BOF Steelmaking",
+      "authors": [
+        "Yujie Liu",
+        "Xinggan Zhang",
+        "Qian Peng",
+        "Yunjin Xia",
+        "Haichuan Wang",
+        "Aijun Deng"
+      ],
+      "publication_year": 2025,
+      "venue": "ISIJ International, 65(10), 1454–1462",
+      "doi": "10.2355/isijinternational.ISIJINT-2025-165",
+      "doi_url": "https://doi.org/10.2355/isijinternational.ISIJINT-2025-165",
+      "publisher_url": "https://www.jstage.jst.go.jp/article/isijinternational/65/10/65_ISIJINT-2025-165/_html/-char/en",
+      "model_family": [
+        "SVR",
+        "DNN",
+        "XGBoost",
+        "KNN",
+        "Elastic Net",
+        "PCC/SCC/MI/MIC feature selection",
+        "Grey Wolf Optimizer",
+        "PI-SHAP"
+      ],
+      "task": "Prediction of total oxygen supply in BOF steelmaking from industrial process variables.",
+      "input_data": "2779 valid production samples from one large steel plant (January–March 2025), with 19 selected process features after removing missing or abnormal heats and variables unavailable at prediction time.",
+      "output_target": "Total oxygen supply (m3).",
+      "preprocessing": "Z-score standardization; four filter methods (Pearson correlation coefficient, Spearman rank correlation coefficient, mutual information and maximal information coefficient) ranked features; top eight features were selected for each subset.",
+      "architecture_or_algorithm": "Five regressors were compared: Elastic Net, SVR, XGBoost, DNN and KNN. A hybrid permutation-importance plus SHAP scheme was also used to construct interpretable feature subsets.",
+      "optimization": "Grey Wolf Optimizer with population size 30 and maximum 100 iterations; reported search ranges include SVR C [0.1,100] and epsilon [0.01,1], DNN hidden layers [3,10], units [20,200], learning rate [0.0001,0.1].",
+      "evaluation": "Stratified five-fold cross-validation based on oxygen-supply intervals; evaluated RMSE and R2.",
+      "reported_results": [
+        "MIC achieved the lowest average RMSE of 197.4 m3 and highest R2 of 0.649 across the reported framework.",
+        "Under MI feature selection, SVR RMSE reached 231.1 m3.",
+        "PI-SHAP feature selection reduced the DNN RMSE from 198.5 m3 (MIC subset) to 194.6 m3, approximately 2% improvement."
+      ],
+      "limitations_or_caveats": "The target is total oxygen supply, not continuous CO/CO2 flow. Inputs are tabular process variables rather than high-dimensional flame spectra. Its stratified five-fold sample-level protocol is not equivalent to leave-one-heat-out validation; do not copy it as the primary validation protocol for the competition's ten heats.",
+      "relevance_to_apmcm_b": "Useful for comparing SVR and DNN under controlled feature-selection strategies, and for designing GWO tuning and PI-SHAP interpretation. Its MIC/PCC/SCC/MI methods can be tested on candidate process features, but spectral-channel selection and heat-level generalization require separate validation.",
+      "reusable_ideas": [
+        "Compare PCC, SCC, MI and MIC rather than assuming Pearson correlation captures nonlinear dependence.",
+        "Use a top-k feature-selection ablation and compare SVR and DNN on exactly the same folds.",
+        "Use PI-SHAP to balance prediction contribution and process interpretability.",
+        "Keep all feature selection and optimizer tuning inside each training fold to avoid leakage."
+      ],
+      "evidence_level": "full_text",
+      "evidence_scope": "Publisher open-access full-text HTML and downloadable PDF inspected, including feature-selection definitions, model setup, GWO search ranges, cross-validation design and results.",
+      "sources": [
+        "https://www.jstage.jst.go.jp/article/isijinternational/65/10/65_ISIJINT-2025-165/_html/-char/en",
+        "https://www.jstage.jst.go.jp/article/isijinternational/65/10/65_ISIJINT-2025-165/_pdf",
+        "https://doi.org/10.2355/isijinternational.ISIJINT-2025-165"
+      ],
+      "verification_date": "2026-11-26",
+      "access_type": "publisher_open_access",
+      "full_text_url": "https://www.jstage.jst.go.jp/article/isijinternational/65/10/65_ISIJINT-2025-165/_pdf",
+      "license": "Creative Commons Attribution-NonCommercial-NoDerivs 4.0 (CC BY-NC-ND 4.0)",
+      "full_text_read_scope": "Publisher HTML and PDF: feature selection formulas, GWO tuning, 2779-sample dataset, 5-fold protocol and performance comparison."
+    },
+    {
+      "id": "bof-deep-transformers-tabular-2025",
+      "title": "Deep Transformers for Analyzing BOF Steelmaking Data",
+      "authors": [
+        "Maryam Khaksar Ghalati",
+        "Zhou Daniel Hao",
+        "Jianbo Zhang",
+        "Hongbiao Dong"
+      ],
+      "publication_year": 2025,
+      "venue": "Metallurgical and Materials Transactions B, 56, 4201–4217",
+      "doi": "10.1007/s11663-025-03615-7",
+      "doi_url": "https://doi.org/10.1007/s11663-025-03615-7",
+      "publisher_url": "https://link.springer.com/article/10.1007/s11663-025-03615-7",
+      "model_family": [
+        "Transformer",
+        "TabTransformer",
+        "MLP",
+        "TabNet",
+        "XGBoost",
+        "LightGBM",
+        "SHAP"
+      ],
+      "task": "BOF endpoint temperature prediction from large-scale industrial tabular process data.",
+      "input_data": "10,168 BOF operations from three furnaces at one plant, covering 259 steel grades and sub-grades; the processed dataset contains numerical and categorical process features.",
+      "output_target": "Endpoint molten-steel temperature.",
+      "preprocessing": "Exploratory data analysis informed binning of ten selected numeric features into categorical features, especially sparse variables with many zeros; categorical features are represented with column embeddings.",
+      "architecture_or_algorithm": "TTB-BOFNet: EDA-informed binning, column embeddings, Transformer blocks for categorical/contextual embeddings, concatenation with remaining numerical features, then fully connected MLP regression head.",
+      "optimization": "End-to-end first-order gradient optimization using MSE loss; compared with MLP, binned MLP, TabNet, TabTransformer, LightGBM and XGBoost.",
+      "evaluation": "Train/test comparison using MSE, MAE, R2 and industrial hit rates at ±10, ±15 and ±20 °C; SHAP analysis for feature contributions.",
+      "reported_results": [
+        "TTB-BOFNet test-set R2 was 0.8435; TabTransformer was 0.8287 and MLP was 0.8060.",
+        "Reported R2 improvement was 1.79% over TabTransformer and 4.65% over MLP.",
+        "The article reports inference time around 0.000323 s per sample for TTB-BOFNet."
+      ],
+      "limitations_or_caveats": "This is a tabular endpoint-temperature task, not time-series forecasting or spectrum-to-gas regression. Its large dataset (10,168 operations) is much larger than the competition's ten heats. Industrial data are not publicly released; the article itself is openly readable under CC BY 4.0.",
+      "relevance_to_apmcm_b": "Useful as a deep-learning reference for handling sparse/categorical process variables, EDA-informed binning, attention-based feature interaction and SHAP interpretation. It does not directly justify a Transformer over temporal spectral sequences in Problem B.",
+      "reusable_ideas": [
+        "Inspect feature distributions before choosing encoders; zero-heavy variables may benefit from explicit categories.",
+        "Compare tabular Transformer against MLP and tree baselines rather than assuming attention wins.",
+        "Use SHAP to inspect whether learned feature importance matches process knowledge.",
+        "Do not transfer the paper's R2 directly to the competition or compare it with gas-flow errors."
+      ],
+      "evidence_level": "full_text",
+      "evidence_scope": "Springer open-access full-text article inspected, including attention equations, TTB-BOFNet architecture, data description, model comparisons and results.",
+      "sources": [
+        "https://link.springer.com/article/10.1007/s11663-025-03615-7",
+        "https://doi.org/10.1007/s11663-025-03615-7"
+      ],
+      "verification_date": "2026-11-26",
+      "access_type": "publisher_open_access",
+      "full_text_url": "https://link.springer.com/article/10.1007/s11663-025-03615-7",
+      "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      "full_text_read_scope": "Publisher full text: self-attention equation, tabular Transformer design, data and preprocessing, training objective, comparative metrics and results."
+    },
+    {
+      "id": "bof-physics-aware-cumulative-decarburization-2026",
+      "title": "A Physics-Aware and Interpretable Framework for Predicting Cumulative Decarburization in Basic Oxygen Furnace (BOF) Steelmaking",
+      "authors": [
+        "Jiazhe An",
+        "Yuxin Tan",
+        "Yicheng Zhao",
+        "Xuezhi Wu",
+        "Yang Han",
+        "Aimin Yang"
+      ],
+      "publication_year": 2026,
+      "venue": "Applied Sciences, 16(6), 3059",
+      "doi": "10.3390/app16063059",
+      "doi_url": "https://doi.org/10.3390/app16063059",
+      "publisher_url": "https://www.mdpi.com/2076-3417/16/6/3059",
+      "model_family": [
+        "full-spectrum cross-correlation",
+        "physics-informed spectral features",
+        "element-wise PCA",
+        "Stacking ensemble",
+        "Random Forest",
+        "Extra Trees",
+        "XGBoost",
+        "CatBoost",
+        "ElasticNet",
+        "SHAP"
+      ],
+      "task": "Prediction of cumulative decarburization during BOF blowing using synchronized flame spectra, off-gas signals and process information.",
+      "input_data": "Industrial data from two converters; flame spectra and CO/CO2/O2 gas signals sampled at 0.5 s. Spectra span 300–1100 nm with 2048 channels. The study describes seven heats for converter A and six heats for converter B.",
+      "output_target": "Cumulative decarburization derived from the sum of instantaneous CO and CO2 flow rates, integrated over time with the composite trapezoidal rule.",
+      "preprocessing": "Full-spectrum averaged cross-correlation between wavelength channels and CO to estimate transport delay; identify characteristic lines for C, Si, Mn, P, Fe, O, Ca, Na and K using NIST; retain stronger lines and perform element-wise PCA to 90% cumulative explained variance. The final converter-A training matrix is reported as 8612 × 32.",
+      "architecture_or_algorithm": "Stacking ensemble with Random Forest, Extra Trees, XGBoost and CatBoost as base learners and ElasticNet as meta-learner; compared against individual tree models, RBF-SVR, FCNN, PCA, Kernel PCA and AutoEncoder features.",
+      "optimization": "Grid search with five-fold cross-validation on training heats only for base learners; test heat excluded from lag calibration, standardization, feature extraction fitting and hyperparameter selection.",
+      "evaluation": "Heat-level holdout: for converter A, one of seven heats is test and six train; for converter B, one of six heats is test and five train. Reports RMSE/MAE comparisons and SHAP interpretation.",
+      "reported_results": [
+        "For example heat A1, full-spectrum averaged cross-correlation indicated approximately 24 s delay between flame spectra and flue-gas CO.",
+        "The paper reports that Stacking achieved the lowest RMSE and MAE in both converter groups among the tested prediction models.",
+        "The physics-informed spectral feature method outperformed PCA, Kernel PCA and AutoEncoder feature extraction when combined with Stacking; SHAP highlighted Fe, C, O and Mn as dominant features."
+      ],
+      "limitations_or_caveats": "This is the closest match to the competition's spectra/off-gas alignment problem, but its target is cumulative decarburization, not separate continuous CO and CO2 prediction. The paper treats lag as relatively stable within a converter and uses a training-heat median; the competition statement says delay changes with oxygen-lance flow rate, so a flow-dependent lag model may be needed instead. The paper's industrial datasets are not openly released.",
+      "relevance_to_apmcm_b": "Very high. It shares 0.5 s flame-spectrum and gas sampling, approximately 2048 wavelength channels, cross-correlation delay correction, spectral feature reduction and heat-level holdout. It provides a strong methodological reference for Problem B Questions 1–3.",
+      "reusable_ideas": [
+        "Estimate gas transport delay using all wavelength channels rather than relying on one noisy spectral band.",
+        "Use metallurgical prior knowledge to select elemental wavelengths, then reduce within-element redundancy with PCA.",
+        "Construct cumulative decarburization by integrating CO+CO2 flow with the trapezoidal rule, after confirming units.",
+        "Hold out complete heats and fit lag, scaling, PCA and model tuning only on training heats.",
+        "Compare physics-informed spectral features with PCA, Kernel PCA and AutoEncoder embeddings."
+      ],
+      "evidence_level": "full_text",
+      "evidence_scope": "MDPI open-access full text inspected, including acquisition, averaged cross-correlation equations, target construction, heat-level split, elemental feature extraction, PCA, stacking optimization and model comparison.",
+      "sources": [
+        "https://www.mdpi.com/2076-3417/16/6/3059",
+        "https://doi.org/10.3390/app16063059"
+      ],
+      "verification_date": "2026-11-26",
+      "access_type": "publisher_open_access",
+      "full_text_url": "https://www.mdpi.com/2076-3417/16/6/3059",
+      "license": "Creative Commons Attribution (CC BY)",
+      "full_text_read_scope": "Full text: multi-source data collection, time-lag estimation, cumulative target integration, element-specific spectral extraction, PCA, heat-wise validation and model comparisons."
+    },
+    {
+      "id": "bof-transformer-dynamic-flame-image-2026",
+      "title": "Transformer-Based Dynamic Flame Image Analysis for Real-Time Carbon Content Prediction in BOF Steelmaking",
+      "authors": [
+        "Hao Yang",
+        "Meixia Fu",
+        "Wei Li",
+        "Lei Sun",
+        "Qu Wang",
+        "Na Chen",
+        "Ronghui Zhang",
+        "Zhenqian Wang",
+        "Yifan Lu",
+        "Zhangchao Ma",
+        "Jianquan Wang"
+      ],
+      "publication_year": 2026,
+      "venue": "Metals, 16(2), 185",
+      "doi": "10.3390/met16020185",
+      "doi_url": "https://doi.org/10.3390/met16020185",
+      "publisher_url": "https://www.mdpi.com/2075-4701/16/2/185",
+      "model_family": [
+        "Vision Transformer",
+        "optical flow",
+        "sequence classification",
+        "encoder-decoder attention"
+      ],
+      "task": "Continuous later-stage molten-steel carbon-content prediction from converter-mouth flame video.",
+      "input_data": "Flame video frames from 13 batches; RGB frames plus optical-flow feature channel. Two to six expert-annotated key points per heat and one endpoint sub-lance measurement were used to create supervision.",
+      "output_target": "Carbon content discretized into 36 categories (0.01–0.36 in 0.01 steps), enabling continuous carbon-trajectory estimation through sequential classification.",
+      "preprocessing": "Cubic-spline interpolation generated intermediate labels from sparse expert annotations; frames resized to 128×528 and normalized to [0,1]. Dense optical flow was computed with Farnebäck and fused with RGB as a fourth channel.",
+      "architecture_or_algorithm": "Six-layer Transformer encoder-decoder with eight attention heads, d_model=512, FFN dimension 2048, 16×16 patches, convolutional embedding and 36-class output.",
+      "optimization": "AdamW, learning rate 2×10^-5, batch size 16, 100 epochs, cross-entropy loss and dropout 0.1.",
+      "evaluation": "Twelve of thirteen batches were used for development with an 8:2 random train/validation split at frame level; one complete batch was held out as an independent test set. Compared Transformer with ConvGRU, CNN-LSTM and 3D-CNN; includes modality and architecture ablations.",
+      "reported_results": [
+        "On the reported validation comparison, Transformer achieved 90.31% top-1 accuracy, 96.82% within ±0.02 tolerance and weighted F1 0.9035.",
+        "Adding optical flow improved top-1 accuracy from 85.42% (RGB) to 90.31% (RGB + optical flow).",
+        "The abstract reports approximately 75% of test-set errors within ±0.05 and 84% accuracy in the critical endpoint phase."
+      ],
+      "limitations_or_caveats": "This uses video imagery, not the competition's 2047-channel spectral arrays, and predicts carbon categories rather than CO/CO2 gas flow. Most training/validation frames are split within 12 batches; only one batch is held out. The model is relatively large and may be unsuitable for only ten competition heats without strong regularization and simpler baselines.",
+      "relevance_to_apmcm_b": "Useful for temporal attention, positional encoding, dynamic flame information and sequence-based output formulation. It is an adjacent-modality reference, not a direct spectral regression recipe.",
+      "reusable_ideas": [
+        "If flame video is available, compare RGB-only against RGB plus optical flow.",
+        "Use positional encodings and attention ablations to test whether temporal order matters.",
+        "Consider whether an ordinal or discretized target is appropriate only if the task's output semantics allow it.",
+        "Avoid adopting a six-layer 512-dimensional Transformer without sufficient independent heats."
+      ],
+      "evidence_level": "full_text",
+      "evidence_scope": "MDPI open-access full text inspected, including label construction, optical-flow equations, Transformer architecture, batch split, training parameters, ablations and test results.",
+      "sources": [
+        "https://www.mdpi.com/2075-4701/16/2/185",
+        "https://doi.org/10.3390/met16020185"
+      ],
+      "verification_date": "2026-11-26",
+      "access_type": "publisher_open_access",
+      "full_text_url": "https://www.mdpi.com/2075-4701/16/2/185",
+      "license": "Creative Commons Attribution (CC BY)",
+      "full_text_read_scope": "Full text: sparse annotation and spline labels, optical-flow extraction, Transformer encoder-decoder, training settings, held-out batch protocol and ablations."
     }
-  ]
+  ],
+  "open_access_update": {
+    "checked_on": "2026-11-26",
+    "new_full_text_papers_added": 4,
+    "previous_record_promoted_to_full_text": "bof-ipsorelm-manganese-2019",
+    "policy": "Only publisher-hosted open-access or freely accessible publisher full text was used. No paywall circumvention and no PDFs were redistributed in this repository."
+  }
 }
