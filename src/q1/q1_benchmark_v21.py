@@ -126,7 +126,13 @@ def method_m4_cleaned_2d_bspline(wl: np.ndarray, spec: np.ndarray) -> np.ndarray
     return np.maximum(Pt @ X @ Pw.T, 10.0)
 
 
-def run_blind_synthetic_benchmark(tag: str = "Att02_6B03206", seed: int = 2026):
+def run_blind_synthetic_benchmark(
+    tag: str = "Att02_6B03206",
+    seed: int = 2026,
+    detector_fn=detect_anomalies_v21,
+    reconstruct_fn=reconstruct_v21,
+    proposed_name: str = "M5_Proposed_v21_WLR_WE_FBS",
+):
     """
     Construct a realistic semi-synthetic ground truth from clean frames of Att02, add realistic
     Poisson-Gaussian sensor noise + all 4 severe anomaly types (11-frame blackout, 2-frame 650-col
@@ -200,7 +206,7 @@ def run_blind_synthetic_benchmark(tag: str = "Att02_6B03206", seed: int = 2026):
     gt_any_anomaly = gt_col_bad[None, :] | gt_blackout[:, None] | gt_flash[:, None] | gt_spike
 
     # --- Test Detection Accuracy of v2.1 vs v1 ---
-    det_v21 = detect_anomalies_v21(wl, Y_corrupt)
+    det_v21 = detector_fn(wl, Y_corrupt)
     pred_any_v21 = det_v21["col_bad_mask"][None, :] | det_v21["frame_bad_mask"][:, None] | det_v21["spike_mask"]
 
     def f1_stats(gt, pred):
@@ -236,8 +242,8 @@ def run_blind_synthetic_benchmark(tag: str = "Att02_6B03206", seed: int = 2026):
     t0 = time.time()
     methods["M4_Cleaned_2D_BSpline"] = (method_m4_cleaned_2d_bspline(wl, Y_corrupt), time.time() - t0, "-")
     t0 = time.time()
-    r5 = reconstruct_v21(wl, Y_corrupt)
-    methods["M5_Proposed_v21_WLR_WE_FBS"] = (r5["spec_recon"], time.time() - t0, str(r5["K_selected"]))
+    r5 = reconstruct_fn(wl, Y_corrupt)
+    methods[proposed_name] = (r5["spec_recon"], time.time() - t0, str(r5["K_selected"]))
 
     bench_rows = []
     idx_na = int(np.argmin(np.abs(wl - 588.40)))

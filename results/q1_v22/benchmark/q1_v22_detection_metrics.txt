@@ -1,0 +1,6 @@
+All_Pixel_Mask_P/R/F1: (99.95, 47.71, 64.59)
+Blackout_Frame_P/R/F1: (100.0, 37.5, 54.55)
+Flash_Frame_P/R/F1: (100.0, 100.0, 100.0)
+Persistent_BadCol_P/R/F1: (100.0, 100.0, 100.0)
+Transient_Spike_P/R/F1: (98.59, 88.53, 93.29)
+NaK_Peak_FalsePositive_%: 0.0722

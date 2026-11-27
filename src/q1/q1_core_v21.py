@@ -235,7 +235,16 @@ def detect_anomalies_v21(wl: np.ndarray, spec: np.ndarray):
     }
 
 
-def reconstruct_v21(wl: np.ndarray, spec: np.ndarray, dt: float = 0.5, rank_bounds=(12, 20), n_svd_iter: int = 8):
+def reconstruct_v21(
+    wl: np.ndarray,
+    spec: np.ndarray,
+    dt: float = 0.5,
+    rank_bounds=(12, 20),
+    n_svd_iter: int = 8,
+    detector=None,
+    t_grid_override: np.ndarray | None = None,
+    stage3_kind: str = "cubic",
+):
     """
     Full v2.1 WLR-WE-FBS continuous spectral reconstruction:
       1) L1-L3 physical anomaly masks
@@ -245,9 +254,15 @@ def reconstruct_v21(wl: np.ndarray, spec: np.ndarray, dt: float = 0.5, rank_boun
     """
     spec = np.asarray(spec, dtype=np.float64)
     T, W = spec.shape
-    t_grid = np.arange(T, dtype=np.float64) * dt
+    t_grid = (
+        np.arange(T, dtype=np.float64) * dt
+        if t_grid_override is None
+        else np.asarray(t_grid_override, dtype=np.float64)
+    )
+    if t_grid.shape != (T,) or np.any(np.diff(t_grid) <= 0):
+        raise ValueError("t_grid_override must be strictly increasing and match spec rows")
 
-    det = detect_anomalies_v21(wl, spec)
+    det = (detect_anomalies_v21 if detector is None else detector)(wl, spec)
     good_frames = det["good_frames"]
     col_bad_mask = det["col_bad_mask"]
     sat_narrow_g = det["sat_narrow_mask"][good_frames]
@@ -359,7 +374,12 @@ def reconstruct_v21(wl: np.ndarray, spec: np.ndarray, dt: float = 0.5, rank_boun
 
     mu_spline = CubicSpline(wl, mu_vec, bc_type="not-a-knot")
     psi_splines = [CubicSpline(wl, psi_basis[k], bc_type="not-a-knot") for k in range(K)]
-    c_splines = [CubicSpline(t_grid, c_full[:, k], bc_type="not-a-knot") for k in range(K)]
+    if stage3_kind == "pchip":
+        c_splines = [PchipInterpolator(t_grid, c_full[:, k], extrapolate=True) for k in range(K)]
+    elif stage3_kind == "cubic":
+        c_splines = [CubicSpline(t_grid, c_full[:, k], bc_type="not-a-knot") for k in range(K)]
+    else:
+        raise ValueError("stage3_kind must be 'cubic' or 'pchip'")
 
     def eval_surface(t_query: np.ndarray, wl_query: np.ndarray) -> np.ndarray:
         tq = np.atleast_1d(np.asarray(t_query, dtype=np.float64))

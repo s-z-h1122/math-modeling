@@ -3,4 +3,7 @@ __pycache__/
 *.xlsb
 *.npz
 data/
+tmp/
+run_outputs/
+cache/
 .DS_Store
